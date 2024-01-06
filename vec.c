@@ -56,13 +56,28 @@ int vec_pop(vec_t * vec)
     }
     return val;
 }
+void destroy_vec(vec_t * vec)
+{
+    // for (int i = 0; i<vec->size; i++)
+    // {
+    //     free((int *)vec->data[i]);
+    // }
+    free(vec->data);
+    free(vec);
+}
+void init_empty_vec_of_size(vec_t ** vec, int size)
+{
+    vec_t * new = (vec_t *) malloc(sizeof(vec_t));
+    new->size = size;
+    new->count = 0;
+    new->data = (int *) calloc(new->size,sizeof(int)*new->size);
+    *vec = new;
+}
 
 int main()
 {
-    vec_t * vec = (vec_t *) malloc(sizeof(vec_t));
-    vec->size = 5;
-    vec->count = 0;
-    vec->data = (int *) calloc(vec->size,sizeof(int)*vec->size);
+    vec_t * vec;
+    init_empty_vec_of_size(&vec,5);
     
     vec_pushback(vec,2);
     print_arr(vec->data,vec->size);
@@ -79,5 +94,8 @@ int main()
     printf("size:%d\n",vec->size);
     printf("count:%d\n",vec->count);
     vec_pop(vec);
+    print_arr(vec->data,vec->size);
+    destroy_vec(vec);
+    init_empty_vec_of_size(&vec,10);
     print_arr(vec->data,vec->size);
 }
